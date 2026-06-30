@@ -1,12 +1,15 @@
 package numtwowords
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
-//MaxNum is the largest number that can be converted to words
+// MaxNum is the largest number that can be converted to words
 const MaxNum = 999
 const MinNum = -999
 
-//Convert converts a number to its string representation
+// Convert converts a number to its string representation
 func Convert(num int) (string, error) {
 	if num < MinNum || num > MaxNum {
 		return "", fmt.Errorf("number out of range: %d of %d to %d", num, MinNum, MaxNum)
@@ -20,7 +23,7 @@ func Convert(num int) (string, error) {
 
 	if num < 0 {
 		result += "minus "
-		num = num * -1
+		num = int(math.Abs(float64(num)))
 	}
 	if num > 99 {
 		hundredindex := num / 100
