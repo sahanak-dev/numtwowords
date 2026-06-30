@@ -12,9 +12,9 @@ func TestIvalidNumber(t *testing.T) {
 		t.Log("Expected error for number out of range")
 		t.Fail()
 	}
-	_, err = numtwowords.Convert(-1)
+	_, err = numtwowords.Convert(numtwowords.MinNum - 1)
 	if err == nil {
-		t.Log("Expected error for negative number")
+		t.Log("Expected error for number out of range")
 		t.Fail()
 	}
 }
@@ -25,18 +25,18 @@ func TestZero(t *testing.T) {
 		t.Log("Unexpected error for zero")
 		t.FailNow()
 	}
-	if result != "zero" {
-		t.Logf("Expected 'zero', got '%v'", result)
+	if result != "Not a valid number" {
+		t.Logf("Expected 'Not a valid number', got '%v'", result)
 		t.FailNow()
 	}
 }
 
 func TestValidNumbers(t *testing.T) {
-	units := [20]string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"}
+	units := [19]string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"}
 	for i, v := range units {
-		result, err := numtwowords.Convert(i)
+		result, err := numtwowords.Convert(i + 1)
 		if err != nil {
-			t.Logf("Unexpected error for number %v got error %v", i, err)
+			t.Logf("Unexpected error for number %v got error %v", i+1, err)
 			t.Fail()
 		}
 		if result != v {
@@ -76,6 +76,22 @@ func TestHundreds(t *testing.T) {
 		700: "seven hundred",
 		340: "three hundred and forty",
 	}
+	for k, v := range testcases {
+		t.Logf("Testing number %v", k)
+		result, err := numtwowords.Convert(k)
+		if err != nil {
+			t.Logf("Unexpected error for number %v got error %v", k, err)
+			t.Fail()
+		}
+		if result != v {
+			t.Logf("Expected '%v', got '%v'", v, result)
+			t.Fail()
+		}
+	}
+}
+
+func TestNegatives(t *testing.T) {
+	testcases := map[int]string{-700: "minus seven hundred", -999: "minus nine hundred and ninety nine", -0: "Not a valid number"}
 	for k, v := range testcases {
 		t.Logf("Testing number %v", k)
 		result, err := numtwowords.Convert(k)

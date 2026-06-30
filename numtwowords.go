@@ -4,18 +4,24 @@ import "fmt"
 
 //MaxNum is the largest number that can be converted to words
 const MaxNum = 999
+const MinNum = -999
 
 //Convert converts a number to its string representation
 func Convert(num int) (string, error) {
-	if num < 0 || num > MaxNum {
-		return "", fmt.Errorf("number out of range: %d", num)
+	if num < MinNum || num > MaxNum {
+		return "", fmt.Errorf("number out of range: %d of %d to %d", num, MinNum, MaxNum)
 	}
 	if num == 0 {
-		return "zero", nil
+		return "Not a valid number", nil
 	}
 	units := [20]string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"}
 	tenns := [8]string{"twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"}
 	result := ""
+
+	if num < 0 {
+		result += "minus "
+		num = num * -1
+	}
 	if num > 99 {
 		hundredindex := num / 100
 		result += units[hundredindex] + " hundred"
